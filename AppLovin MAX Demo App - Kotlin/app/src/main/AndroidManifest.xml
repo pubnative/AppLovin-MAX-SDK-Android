@@ -13,13 +13,14 @@
 
         <meta-data
             android:name="applovin.sdk.key"
-            android:value="SDK_KEY_HERE" />
+            android:value="7-JBxCfWENehXonRZUofTDd0JdARpWUG6LmQKs1mwy61r_AfBFUK7TpkZ8VR6-63GA6vK_Vp0hTCa6raFBQsAT" />
 
         <activity
             android:name="com.applovin.enterprise.apps.demoapp.SplashActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
