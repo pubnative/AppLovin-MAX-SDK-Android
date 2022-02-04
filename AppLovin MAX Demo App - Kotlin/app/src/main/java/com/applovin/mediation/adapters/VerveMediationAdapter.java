@@ -191,10 +191,10 @@ public class VerveMediationAdapter
     }
 
     @Override
-    public void loadNativeAd(MaxAdapterResponseParameters maxAdapterResponseParameters, Activity activity, MaxNativeAdAdapterListener maxNativeAdAdapterListener) {
+    public void loadNativeAd(MaxAdapterResponseParameters parameters, Activity activity, MaxNativeAdAdapterListener maxNativeAdAdapterListener) {
         HyBidNativeAdRequest nativeAdRequest = new HyBidNativeAdRequest();
         nativeAdRequest.setPreLoadMediaAssets(true);
-        nativeAdRequest.load("7", new NativeAdListener(activity, maxAdapterResponseParameters, maxNativeAdAdapterListener));
+        nativeAdRequest.prepareAd(parameters.getBidResponse(), new NativeAdListener(activity, parameters, maxNativeAdAdapterListener));
     }
 
     private void updateUserConsent(final MaxAdapterResponseParameters parameters) {
