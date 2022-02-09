@@ -15,6 +15,7 @@ import com.applovin.mediation.MaxReward;
 import com.applovin.mediation.adapter.MaxAdViewAdapter;
 import com.applovin.mediation.adapter.MaxAdapterError;
 import com.applovin.mediation.adapter.MaxInterstitialAdapter;
+import com.applovin.mediation.adapter.MaxNativeAdAdapter;
 import com.applovin.mediation.adapter.MaxRewardedAdapter;
 import com.applovin.mediation.adapter.MaxSignalProvider;
 import com.applovin.mediation.adapter.listeners.MaxAdViewAdapterListener;
@@ -47,7 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VerveMediationAdapter
         extends MediationAdapterBase
-        implements MaxInterstitialAdapter, MaxRewardedAdapter, MaxAdViewAdapter, MaxSignalProvider {
+        implements MaxInterstitialAdapter, MaxRewardedAdapter, MaxAdViewAdapter, MaxSignalProvider, MaxNativeAdAdapter {
     private static final AtomicBoolean initialized = new AtomicBoolean();
     private static InitializationStatus status;
 
@@ -191,10 +192,15 @@ public class VerveMediationAdapter
     }
 
     @Override
-    public void loadNativeAd(MaxAdapterResponseParameters parameters, Activity activity, MaxNativeAdAdapterListener maxNativeAdAdapterListener) {
+    public void loadNativeAd(MaxAdapterResponseParameters parameters, Activity activity, MaxNativeAdAdapterListener adapterListener) {
+        log("Loading native ad");
+
+        updateMuteState(parameters);
+        updateUserConsent(parameters);
+
         HyBidNativeAdRequest nativeAdRequest = new HyBidNativeAdRequest();
         nativeAdRequest.setPreLoadMediaAssets(true);
-        nativeAdRequest.prepareAd(parameters.getBidResponse(), new NativeAdListener(activity, parameters, maxNativeAdAdapterListener));
+        nativeAdRequest.prepareAd(parameters.getBidResponse(), new NativeAdListener(activity, parameters, adapterListener));
     }
 
     private void updateUserConsent(final MaxAdapterResponseParameters parameters) {
@@ -434,7 +440,7 @@ public class VerveMediationAdapter
 
             if (!hasRequiredAssets(isTemplateAd, nativeAd)) {
                 e("Native ad (" + nativeAd + ") does not have required assets.");
-                listener.onNativeAdLoadFailed(new MaxAdapterError(-5400, "Missing Native Ad Assets"));
+                listener.onNativeAdLoadFailed(MaxAdapterError.MISSING_REQUIRED_NATIVE_AD_ASSETS);
                 return;
             }
 
